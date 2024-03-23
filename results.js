@@ -85,7 +85,7 @@ function runTwitchAnal(page) {
 
             while ((match = regex.exec(htmlContent)) !== null) {
                 for (term of match[2].toLowerCase().trim().match(/[a-zA-Z ]/g).join("").split(" ")) {
-                    if (term.startsWith(param) || term.endsWith(param)) {
+                    if (term.startsWith(param)) {
                         twitchMatches.push([match[1], match[2].trim(), `https://static-cdn.jtvnw.net/previews-ttv/live_user_${match[1]}-640x360.jpg`])
                         console.log(twitchMatches)
                         break
@@ -95,7 +95,24 @@ function runTwitchAnal(page) {
             numDone++
             if (numDone == params.length) {
                 if (page < 2) {
-                    runTwitchAnal(page + 1)
+                    try {
+                        runTwitchAnal(page + 1)
+                    } catch (e) {
+                        for (match of twitchMatches) {
+                            console.log(match)
+                            allCards.push(`<div class="resultCard">
+                            <a href="https://www.twitch.tv/${match[0]}" class="thumbLink"><img src="${match[2]}" class="thumbnail"></a>
+                            <div class="resultInfo">
+                                <a href="https://www.twitch.tv/${match[0]}" class="titleLink"><h2 class="resultTitle">${match[1]}</h2></a>
+                                <p class="resultChannel">${match[0]}</p>
+                                <p class="platform">Twitch</p>
+                            </div>
+                        </div>`)
+                        }
+                        for (card of loopArrayInPattern(allCards, allCards.length - twitchMatches.length)) { 
+                            document.getElementById("results").innerHTML += card
+                        }
+                    }
                 } else {
                     for (match of twitchMatches) {
                         console.log(match)
