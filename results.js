@@ -7,18 +7,18 @@ const endpointUrl = proxy + encodeURIComponent(`https://yewtu.be/search?q=${sear
 
 var allCards = []
 
-function loopArrayInPattern(array) {
-    let result = [];
-    let start = 0;
-    let end = array.length - 1;
+function loopArrayInPattern(arr, n) {
+    const result = [];
+    let segment1 = arr.slice(0, n);
+    let segment2 = arr.slice(n);
 
-    while (start <= end) {
-        result.push(array[start]); // Push first element
-        if (start !== end) {
-            result.push(array[end]); // Push last element (if not the same as first)
+    while (segment1.length > 0 || segment2.length > 0) {
+        if (segment1.length > 0) {
+            result.push(segment1.shift());
         }
-        start++;
-        end--;
+        if (segment2.length > 0) {
+            result.push(segment2.shift());
+        }
     }
 
     return result;
@@ -94,21 +94,23 @@ function runTwitchAnal(page) {
             }
             numDone++
             if (numDone == params.length) {
-                console.log("-----")
-                console.log(twitchMatches)
-                for (match of twitchMatches) {
-                    console.log(match)
-                    allCards.push(`<div class="resultCard">
-                    <a href="https://www.twitch.tv/${match[0]}" class="thumbLink"><img src="${match[2]}" class="thumbnail"></a>
-                    <div class="resultInfo">
-                        <a href="https://www.twitch.tv/${match[0]}" class="titleLink"><h2 class="resultTitle">${match[1]}</h2></a>
-                        <p class="resultChannel">${match[0]}</p>
-                        <p class="platform">Twitch</p>
-                    </div>
-                </div>`)
-                }
-                for (card of loopArrayInPattern(allCards)) { 
-                    document.getElementById("results").innerHTML += card
+                if (page < 2) {
+                    runTwitchAnal(page + 1)
+                } else {
+                    for (match of twitchMatches) {
+                        console.log(match)
+                        allCards.push(`<div class="resultCard">
+                        <a href="https://www.twitch.tv/${match[0]}" class="thumbLink"><img src="${match[2]}" class="thumbnail"></a>
+                        <div class="resultInfo">
+                            <a href="https://www.twitch.tv/${match[0]}" class="titleLink"><h2 class="resultTitle">${match[1]}</h2></a>
+                            <p class="resultChannel">${match[0]}</p>
+                            <p class="platform">Twitch</p>
+                        </div>
+                    </div>`)
+                    }
+                    for (card of loopArrayInPattern(allCards, allCards.length - twitchMatches.length)) { 
+                        document.getElementById("results").innerHTML += card
+                    }
                 }
             }
         })
