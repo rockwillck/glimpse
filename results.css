@@ -1,11 +1,20 @@
 #discoverContainer {
 	position: absolute;
-	top: 5vw;
+	top: 20px;
 	left: 50%;
 	translate: -50% 0%;
 	width: 90vw;
 	height: 20px;
     font-size: 15px;
+}
+#discover {
+	text-indent: 10px;
+}
+#discoverContainer::before {
+	content: ">";
+	position: absolute;
+	top: 50%;
+	left: 10px;
 }
 
 #results {

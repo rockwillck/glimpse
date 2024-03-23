@@ -1,8 +1,9 @@
 var searchParams = new URLSearchParams(window.location.href.replace(window.location.origin, "").replace(window.location.pathname, ""))
 
 searchBar.value = searchParams.get("search")
+const proxy = "https://corsproxy.io/?"
 
-const endpointUrl = `https://corsproxy.io/?https://yewtu.be/search?q=${searchParams.get("search")}&features=live`;
+const endpointUrl = proxy + encodeURIComponent(`https://yewtu.be/search?q=${searchParams.get("search")}&features=live`)
 
 var allCards = []
 
@@ -34,7 +35,6 @@ fetch(endpointUrl)
   .then(htmlContent => {
     // Handle the HTML content here
     htmlContent = htmlContent.replaceAll("\n", "").replaceAll("\t", "").replaceAll(">                <", "><").replaceAll(">            <", "><").replaceAll(">                            <", "><").replaceAll(">                        <", "><")
-    console.log(htmlContent)
     let regex = /<div class="video-card-row"><a href="\/watch\?v=(.*?)"><p dir="auto">(.*?)<\/p><\/a><\/div>(.*?)<a href="(.*?)"><p class="channel-name" dir="auto">(.*?)<\/p><\/a>/g
     var matches = []
     var match
@@ -43,7 +43,6 @@ fetch(endpointUrl)
         matches.push([match[1], match[2], match[4], match[5].trim().replace("&nbsp;<i class=\"icon ion ion-md-checkmark-circle\"></i>", "")]);
     }
     for (match of matches) {
-        console.log(match)
         allCards.push(`<div class="resultCard">
         <a href="https://www.youtube.com/watch?v=${match[0]}" class="thumbLink"><img src="http://img.youtube.com/vi/${match[0]}/0.jpg" class="thumbnail"></a>
         <div class="resultInfo">
@@ -75,26 +74,28 @@ fetch(endpointUrl)
   
 var twitchMatches = []
 function runTwitchAnal(page) {
-    // Fetch HTML content of the webpage
-    fetchHTML(`https://corsproxy.io/?https://twitch-tools.rootonline.de/channel_previews.php?title=${searchParams.get("search")}&page=${page}`, {
-        method: 'GET', // or 'POST', 'PUT', etc.
-        mode: 'no-cors'
-      })
+    let params = searchParams.get("search").toLowerCase().split(" ")
+    var numDone = 0
+    for (let param of params) {
+        // Fetch HTML content of the webpage
+        fetchHTML(proxy + (`https://twitch-tools.rootonline.de/channel_previews.php?title=${param}&page=${page}`))
         .then(htmlContent => {
-            
             let regex = /<h6 class="card-title m-1 mb-3"><a\s+href="https:\/\/www\.twitch\.tv\/([^"]+)"[^>]*>([^<]+)<\/a><\/h6>/g
             let match
 
-            var content = false
             while ((match = regex.exec(htmlContent)) !== null) {
-                content = true
-                if (match[2].toLowerCase().trim().match(/[a-zA-Z ]/g).join("").split(" ").includes("art")) {
-                    twitchMatches.push([match[1], match[2].trim(), `https://static-cdn.jtvnw.net/previews-ttv/live_user_${match[1]}-640x360.jpg`])
+                for (term of match[2].toLowerCase().trim().match(/[a-zA-Z ]/g).join("").split(" ")) {
+                    if (term.startsWith(param) || term.endsWith(param)) {
+                        twitchMatches.push([match[1], match[2].trim(), `https://static-cdn.jtvnw.net/previews-ttv/live_user_${match[1]}-640x360.jpg`])
+                        console.log(twitchMatches)
+                        break
+                    }
                 }
             }
-            if (content && page < 5) {
-                runTwitchAnal(page + 1)
-            } else {
+            numDone++
+            if (numDone == params.length) {
+                console.log("-----")
+                console.log(twitchMatches)
                 for (match of twitchMatches) {
                     console.log(match)
                     allCards.push(`<div class="resultCard">
@@ -110,9 +111,10 @@ function runTwitchAnal(page) {
                     document.getElementById("results").innerHTML += card
                 }
             }
-    })
-    .catch(error => {
-        console.error('Error fetching the HTML:', error);
-    });
+        })
+        .catch(error => {
+            console.error('Error fetching the HTML:', error);
+        });
+    }
 }
 runTwitchAnal(1)
