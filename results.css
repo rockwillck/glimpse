@@ -1,0 +1,71 @@
+#discoverContainer {
+	position: absolute;
+	top: 5vw;
+	left: 50%;
+	translate: -50% 0%;
+	width: 90vw;
+	height: 20px;
+    font-size: 15px;
+}
+
+#results {
+	position: absolute;
+	top: calc(5vw + 30px);
+	left: 0;
+	width: 100%;
+	padding: 5vw;
+	box-sizing: border-box;
+	display:flex;
+	flex-wrap: wrap;
+}
+.resultCard {
+	background-color: white;
+	flex: 1;
+	margin-bottom: 20px;
+	border-radius: 10px;
+	display: flex;
+	padding: 10px;
+	box-sizing: border-box;
+	flex-direction: column;
+	margin: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+.thumbnail {
+	width: 100%;
+	border-radius: 10px;
+}
+.resultInfo {
+	padding-top: 10px;
+	box-sizing: border-box;
+	min-width: 200px;
+}
+h2{ 
+	padding: 0;
+	margin: 0;
+}
+p {
+	padding: 0;
+	margin-top: 10px;
+}
+
+.transitionedResults {
+	transition: 1s;
+	filter: blur(10vmin);
+	-webkit-filter: blur(10vmin);
+	opacity: 0;
+}
+
+.thumbLink {
+}
+.titleLink, .channelLink {
+	text-decoration: none;
+	color: inherit;
+}
+
+.platform {
+	background-color: black;
+	color: white;
+	width: fit-content;
+	padding: 10px;
+	border-radius: 10px;
+}

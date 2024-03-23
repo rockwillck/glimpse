@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Glimpse | Search</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<meta name="title" content="Glimpse | Search" />
+	<meta name="description" content="Glimpse is a better search engine for livestreams." />
+	
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://glimpse.rockwill.dev/" />
+	<meta property="og:title" content="Glimpse" />
+	<meta property="og:description" content="Glimpse is a better search engine for livestreams." />
+	<meta property="og:image" content="https://i.imgur.com/9BPPl3J.png" />
+	
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content="https://glimpse.rockwill.dev/" />
+	<meta property="twitter:title" content="Glimpse" />
+	<meta property="twitter:description" content="Glimpse is a better search engine for livestreams." />
+	<meta property="twitter:image" content="https://i.imgur.com/9BPPl3J.png" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="results.css" />
+	<link rel="icon" href="icon.svg">
+</head>
+<body>
+	<div id="all">
+		<div id="discoverContainer" class="untransitioned">
+			<input id="discover" placeholder="⋆˙⟡ Keep exploring ⟡˙⋆" autocomplete="off">
+		</div>
+        <div id="results">
+        </div>
+	</div>
+	<canvas id="canvas"></canvas>
+	<script src="app.js"></script>
+	<script src="results.js"></script>
+</body>
+</html>

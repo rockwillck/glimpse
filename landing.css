@@ -1,0 +1,53 @@
+#discoverContainer {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
+	width: 80vw;
+	height: 100px;
+    font-size: 30px;
+}
+#discoverContainer::after {
+	content: "⏎";
+	color: rgba(0, 0, 0, 0.456);
+	position: absolute;
+	font-size: 20px;
+	height: 40px;
+	width: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	right: 1em;
+	top: 50%;
+	translate: 0% -50%;
+}
+
+.content {
+	position: absolute;
+	top: 100vh;
+	width: 100%;
+	text-align: center;
+	padding: 30px;
+	padding-bottom: 100px;
+	box-sizing: border-box;
+}
+
+@keyframes downer {
+	0%   {opacity: 0;translate: 0 -10px;}
+  50%  {opacity: 1;translate: 0 0px;}
+  100% {opacity: 0;translate: 0 -10px;}
+}
+
+#down {
+	position: absolute;
+	left: 50%;
+	translate: -50%;
+	bottom: 5px;
+	font-size: 40px;
+	color: black;
+	animation: downer;
+	animation-duration: 2s;
+	animation-iteration-count: infinite;
+	font-weight: inherit;
+	font-family: inherit;
+}
